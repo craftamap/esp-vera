@@ -26,7 +26,7 @@ void setReadyToDisconnect() {
 }
 
 void disconnect() {
-  ESP.deepSleep(300e6);
+  ESP.deepSleep(1800e6);
 }
 
 float getPercentage(int sensorReading) {
@@ -48,7 +48,10 @@ void onMqttConnect(bool sessionPresent) {
   Serial.printf("Session present: %d\n", sessionPresent);
 
   int sensorReading = analogRead(A0); //put Sensor insert into soil
-  float soilMoistureValue = getPercentage(sensorReading);
+  float soilMoistureValue1 = getPercentage(sensorReading);
+  float soilMoistureValue2 = getPercentage(sensorReading);
+  float soilMoistureValue3 = getPercentage(sensorReading);
+  float soilMoistureValue = (soilMoistureValue1 + soilMoistureValue2 + soilMoistureValue3) / 3.0;
   char *string = (char*)malloc(13 * sizeof(char));
   sprintf(string, "%f", soilMoistureValue);
   uint16_t packetIdPub = mqttClient.publish(MQTT_TOPIC, 2, true, string); 
